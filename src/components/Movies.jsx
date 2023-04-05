@@ -13,7 +13,7 @@ const Movies = ({
           return (
             <Movie
               movie={movie}
-              key={movie.id}
+              key={idx} // placed index as a key to avoid error of duplicate key
               viewTrailer={viewTrailer}
               lastMovieRef={lastMovieRef}
             />
@@ -22,7 +22,7 @@ const Movies = ({
           return (
             <Movie
               movie={movie}
-              key={movie.id}
+              key={idx} // placed index as a key to avoid error of duplicate key
               viewTrailer={viewTrailer}
             />
           );

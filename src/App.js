@@ -1,20 +1,13 @@
 import { useState, useRef, useCallback } from "react";
-import {
-  Routes,
-  Route,
-  useSearchParams,
-} from "react-router-dom";
+import { Routes, Route, useSearchParams } from "react-router-dom";
 import "reactjs-popup/dist/index.css";
-import {
-  ENDPOINT,
-  API_KEY,
-} from "./constants";
+import { ENDPOINT, API_KEY } from "./constants";
 import Header from "./components/Header";
 import Movies from "./components/Movies";
 import Starred from "./components/Starred";
 import WatchLater from "./components/WatchLater";
 import YouTubePlayer from "./components/YoutubePlayer";
-import "./app.scss";
+import "./styles/app.scss";
 import Modal from "./components/modal";
 import useInfiniteMovies from "./hooks/useInfiniteMovies";
 import useInfiniteSearchedMovies from "./hooks/useInfiniteSearchedMovies";
@@ -24,21 +17,22 @@ const App = () => {
   const [videoKey, setVideoKey] = useState();
   const [isOpen, setOpen] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
-  const [ query, setQuery ] = useState('')
+  const [query, setQuery] = useState("");
   const observer = useRef();
 
   const handleSearch = (e) => {
-    console.log(e.target.value)
-    setQuery(e.target.value)
-    setPageNumber(1)
-  }
+    console.log(e.target.value);
+    setQuery(e.target.value);
+    setPageNumber(1);
+  };
 
   const searchMovies = (query) => {
-    handleSearch(query)
-  }
+    handleSearch(query);
+  };
 
   const { movies, hasMore, loading, error } = useInfiniteMovies(pageNumber);
-  const { searchedMovies, hasMoreResults, loadingResult, errorResult } = useInfiniteSearchedMovies(query, pageNumber);
+  const { searchedMovies, hasMoreResults, loadingResult, errorResult } =
+    useInfiniteSearchedMovies(query, pageNumber);
   const closeModal = () => setOpen(false);
 
   const viewTrailer = (movie) => {
@@ -67,7 +61,6 @@ const App = () => {
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          console.log("visible");
           setPageNumber((prevPageNumber) => prevPageNumber + 1);
         }
       });
@@ -82,7 +75,6 @@ const App = () => {
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMoreResults) {
-          console.log("visible");
           setPageNumber((prevPageNumber) => prevPageNumber + 1);
         }
       });
@@ -93,14 +85,8 @@ const App = () => {
 
   return (
     <div className="App">
-      <Header
-        handleSearch={handleSearch}
-        searchMovies={searchMovies}
-      />
+      <Header handleSearch={handleSearch} searchMovies={searchMovies} />
       <div className="container">
-        {(loading || loadingResult) &&(
-          <Spinner />
-        )}
         <Modal onClose={() => closeModal()} show={isOpen}>
           {videoKey ? (
             <YouTubePlayer videoKey={videoKey} />
@@ -115,9 +101,13 @@ const App = () => {
             path="/"
             element={
               <Movies
-                lastMovieRef={query !== ''? lastMovieInSearchElementRef : lastMovieElementRef}
-                movies={query !== '' ? searchedMovies :movies}
-                viewTrailer={viewTrailer}    
+                lastMovieRef={
+                  query !== ""
+                    ? lastMovieInSearchElementRef
+                    : lastMovieElementRef
+                }
+                movies={query !== "" ? searchedMovies : movies}
+                viewTrailer={viewTrailer}
               />
             }
           />
@@ -134,6 +124,7 @@ const App = () => {
             element={<h1 className="not-found">Page Not Found</h1>}
           />
         </Routes>
+        {(loading || loadingResult) && <Spinner />}
       </div>
     </div>
   );
