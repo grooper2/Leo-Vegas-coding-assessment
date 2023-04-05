@@ -44,5 +44,13 @@
   .no-trailer-padding {
     padding: 30px;
   }
+
+  .movie-grid {
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
   
 }
