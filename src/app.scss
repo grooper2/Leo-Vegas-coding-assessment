@@ -37,8 +37,12 @@
 
     .video-player {
       max-width: 100%;
-      height: 60vw;
+      height: 100%;
     }
+  }
+
+  .no-trailer-padding {
+    padding: 30px;
   }
   
 }
